@@ -1,37 +1,17 @@
-# User function Template for python3
-def heapify(arr, n, index):
-    largest = index
-    l = 2 * index + 1
-    r = 2 * index + 2
+def heapify(A,n,index):
+    i = index
+    l = index*2 + 1
+    r = index*2 + 2
     if l < n:
-        if arr[l] < arr[largest]:
-            largest = l
+        if A[index] > A[l]:
+            index = l
     if r < n:
-        if arr[r] < arr[largest]:
-            largest = r
-    if index != largest:
-        arr[index], arr[largest] = arr[largest], arr[index]
-        heapify(arr, n, largest)
+        if A[index] > A[r]:
+            index = r
+    if index != i:
+        A[index],A[i] = A[i],A[index]
+        heapify(A, n, index)
 
-
-def buildMinHeap(arr, n):
-    index = n // 2 - 1
-    while index > -1:
-        heapify(arr, n, index)
-        index -= 1
-
-
-def deleteRoot(arr, n):
-    x = arr[0]
-    arr[0] = arr[n - 1]
-    arr.pop()
-    buildMinHeap(arr, n - 1)
-    return x
-
-
-def insertHeap(arr, n, val):
-    arr.append(val)
-    buildMinHeap(arr, n + 1)
 
 
 class Solution:
@@ -40,40 +20,21 @@ class Solution:
     # @return an integer
     def solve(self, A, B):
         n = len(A)
-        b = B
-        if B < n // 2:
-            while B > 0:
-                buildMinHeap(A, n)
-                A[0], A[n - 1] = A[n - 1], A[0]
-                A[n - 1] = -1 * A[n - 1]
-                B -= 1
-            return sum(A)
-        else:
-            A.sort()
-            i = 0
-            while B > 0:
-                if i < n:
-                    if A[i] < 0:
-                        A[i] = -1 * A[i]
-                        B -= 1
-                        i += 1
-                    else:
-                        break
-                else:
-                    break
-
+        last = n//2 - 1
+        while last > -1:
+            heapify(A,n,last)
+            last -= 1
+        while A[0] < 0:
             if B > 0:
-                min_ele = A[0]
-                index = 0
-                for i in range(1, n):
-                    if A[i] < min_ele:
-                        min_ele = A[i]
-                        index = i
-                while B > 0:
-                    A[index] = (-1) * A[index]
-                    B -= 1
-            return sum(A)
-
+                A[0] = A[0] * (-1)
+                heapify(A, n, 0)
+                B -= 1
+            else:
+                break
+        if A[0] > 0 and B > 0:
+            if B%2 == 1:
+                A[0] = (-1) * A[0]
+        return sum(A)
 
 
 if __name__ == '__main__':

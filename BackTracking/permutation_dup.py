@@ -31,7 +31,7 @@ class Solution:
         return ans
 
 if __name__ == '__main__':
-    A = [3,2,3]
+    A = [3,2,3,4]
     s = Solution()
     ans = s.permute(A)
     print(ans)
