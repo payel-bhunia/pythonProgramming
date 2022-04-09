@@ -1,46 +1,38 @@
-class Solution:
-    def removeBrackets(self, Exp):
-        # code here
-        char = []
-        opr = []
-        ans = []
-        hash_map = {'+': 1, '-': 1, '*': 2, '/': 2}
-        for i in Exp:
-            if i in hash_map or i == '(' or i == ')':
-                opr.append(i)
-            else:
-                char.append(i)
-        i = 0
-        while i < len(opr):
-            if (opr[i] == '(' or opr[i] == ')') and i > 0 and i < len(opr) - 1:
-                if hash_map[opr[i - 1]] == hash_map[opr[i - 1]]:
-                    opr.pop(i)
-                if opr[i] == '(' and opr[i + 1] == ')':
-                    opr.pop(i)
-                    opr.pop(i + 1)
-            i += 1
-        for i in Exp:
-            if i in hash_map or i == '(' or i == ')':
-                if i == opr[0]:
-                    opr.pop(0)
-                    ans.append(i)
-            else:
-                ans.append(i)
-        if ans[0] == '(' and ans[-1] == ')':
-            ans.pop(0)
-            ans.pop()
-        return ''.join(ans)
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+test_case = int(input())
+block = []
+for i in range(test_case):
+    block_size = int(input())
+    temp = list(map(int, input().split(' ')))
+    block.append(temp)
+for i in range(test_case):
+    last = 10000007
+    start = 0
+    end = len(block[i]) - 1
+    flag = 0
+    while start <= end:
+        if block[i][start] > block[i][end]:
+            max_val = block[i][start]
+            min_val = block[i][end]
+        else:
+            min_val = block[i][start]
+            max_val = block[i][end]
+        if max_val <= last:
+            last = max_val
+        elif min_val <= last:
+            last = min_val
+        else:
+            flag = 1
+            break
+        if last == block[i][start]:
+            start += 1
+        else:
+            end -= 1
+    if flag == 0:
+        print('Yes')
+    else:
+        print("No")
 
-# {
-#  Driver Code Starts
-# Initial Template for Python 3
+    flag = 0
 
-if __name__ == '__main__':
-    t = 1
-    for _ in range(t):
-        Exp = input()
 
-        ob = Solution()
-        print(ob.removeBrackets(Exp))
-
-# } Driver Code Ends

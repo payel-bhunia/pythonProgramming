@@ -1,33 +1,46 @@
 import copy
-def gen(n, vv, hv, cv1, cv2, curr, ans, idx,count):
+
+
+def gen(A, i, ans, temp,hi,vi):
     # base condition
-    if count == n:
-        ans.append(curr)
+    if i == A:
+        str = ''
+        row = []
+        for m in range(A):
+            col = temp[-1]
+            str = ''
+            for n in range(A):
+                if col == n:
+                    str += 'Q'
+                else:
+                    str += '.'
+            row.append(str)
+        ans.append(row)
         return
 
-    for i in range(idx, n):
-        if hv[i] == 0:
-            for j in range(n):
-                if vv[j] == 0:
-                    if cv1[i + j] == 0 and cv2[j - i + n - 1] == 0:
-                        hv[i] = 1
-                        vv[j] = 1
-                        #cv11 = cv1.copy()
-                        cv1[i + j] = 1
-                        #cv22 = cv2.copy()
-                        cv2[j - i + n - 1] = 1
-                        s = ['.'] * n
-                        s[j] = 'Q'
-                        st = ''.join(map(str, s))
-                        curr1 = curr.copy()
-                        curr1.append(st)
-                        gen(n, vv.copy(), hv.copy(), cv1.copy(), cv2.copy(), curr1, ans, i + 1, count+1)
-                        hv[i] = 0
-                        vv[j] = 0
-                        # cv11 = cv1.copy()
-                        cv1[i + j] = 0
-                        # cv22 = cv2.copy()
-                        cv2[j - i + n - 1] = 0
+    for k in range(A):
+        if i != 0:
+            prev_col = temp[-1]
+            if hi[i] != 1 and vi[k] != 1 and k+1 != prev_col and k-1 != prev_col and k != prev_col:
+                temp.append(k)
+                #curr[i][k] = 'Q'
+                hi[i] = 1
+                vi[k] = 1
+                gen(A, i + 1, ans, temp.copy(),hi.copy(),vi.copy())
+                temp.pop()
+                #curr[i][k] = '.'
+                hi[i] = 0
+                vi[k] = 0
+        else:
+            temp.append(k)
+            #curr[i][k] = 'Q'
+            hi[i] = 1
+            vi[k] = 1
+            gen(A, i + 1, ans, temp.copy(), hi.copy(), vi.copy())
+            temp.pop()
+            #curr[i][k] = '.'
+            hi[i] = 0
+            vi[k] = 0
 
 
 class Solution:
@@ -36,20 +49,19 @@ class Solution:
     def solveNQueens(self, A):
         ans = []
         curr = []
-        vv = [0] * A
-        hv = [0] * A
-        cv1 = [0] * (2 * A - 1)
-        cv2 = [0] * (2 * A - 1)
-        idx = 0
-        ans = []
-        count = 0
-        gen(A, vv, hv, cv1, cv2, curr, ans, idx,count)
+        vi = [0] * A
+        hi = [0] * A
+        col = ['.'] * A
+        for i in range(A):
+            curr.append(col.copy())
+        i = 0
+        temp = []
+        gen(A, i, ans, temp,vi,hi)
         return ans
 
 
-
 if __name__ == '__main__':
-    A = 4
+    A = 8
     s = Solution()
     ans = s.solveNQueens(A)
     print(ans)

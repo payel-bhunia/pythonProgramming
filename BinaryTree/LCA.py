@@ -21,7 +21,7 @@ def findLCA1(root, n1, n2, ans, curr,llist):
     if root.data == n1 or root.data == n2:
         curr.append(root)
         llist.append(root.data)
-        ans.append(curr)
+        ans.append(curr.copy())
         if len(ans) == 2:
             return
     else:
@@ -42,6 +42,12 @@ class Solution:
         findLCA1(root, n1, n2, ans, curr,llist)
         print(ans[0])
         print(ans[1])
+        for i in ans[0]:
+            print(i.data,end = ' ')
+        print('-----')
+        for i in ans[1]:
+            print(i.data,end = ' ')
+        print('-----')
         if len(ans) == 2:
             i = 0
             while i < len(ans[0]) and i < len(ans[1]):
@@ -131,8 +137,10 @@ def buildTree(s):
 if __name__ == "__main__":
     t = 1
     for _ in range(0, t):
-        a, b = list(map(int, input().split()))
-        s = input()
+        a = 2
+        b= 5
+        #a, b = list(map(int, input().split()))
+        s = '1 2 3 -1 -1 4 -1 -1 5 -1 -1'
         root = buildTree(s)
         k = Solution().lca(root, a, b)
         print(k.data)

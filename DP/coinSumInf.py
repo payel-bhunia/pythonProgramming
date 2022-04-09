@@ -1,21 +1,28 @@
-def dp(A,B,ans):
-    if B == 0:
-        return 1
-    if ans[B] == 0:
-        for i in A:
-            if i <= B:
-                ans[B] += dp(A, B - i, ans)
-    return ans[B]
-
 
 class Solution:
     def coinchange2(self, A, B):
-        ans = [0] * (B + 1)
-        dp(A, B, ans)
-        return ans[B]
+        n = len(A)
+        mod = 1000007
+        dp = []
+        prev = [0] * (B + 1)
 
-A = [1,2,3]
+        curr = [-1] * (B + 1)
+        i = 0
+        j = 0
+        prev[0] = 1
+        curr[0] = 1
+        for i in range(1, n + 1):
+            for j in range(1, B + 1):
+                if j >= A[i - 1]:
+                    curr[j] = (prev[j] + curr[j - A[i - 1]]) % mod
+                else:
+                    curr[j] = prev[j] % mod
+            prev = curr.copy()
+        return curr[B] % mod
+
+
+A = [1, 2, 3]
 B = 4
 s = Solution()
-ans = s.coinchange2(A,B)
+ans = s.coinchange2(A, B)
 print(ans)
